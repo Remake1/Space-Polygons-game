@@ -49,6 +49,15 @@ void centerTextByFigure(sf::Text &text, sf::RectangleShape &rectangle)
     text.setPosition(textX, textY);
 }
 
+void changeDVDcolor(sf::RectangleShape &rectangle)
+{
+    // change color to random
+    int r = rand() % 255;
+    int g = rand() % 255;
+    int b = rand() % 255;
+    rectangle.setFillColor(sf::Color(r, g, b));
+}
+
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "SFML works!");
@@ -68,6 +77,19 @@ int main()
 
     sf::RectangleShape rect({170.f, 120.f});
     rect.setFillColor(sf::Color::Green);
+
+    // DVD
+    sf::Clock clock;
+
+    sf::Texture texture;
+    if (!texture.loadFromFile("image_t.png"))
+    {
+        std::cerr << "Couldn't load the font!\n";
+        exit(-1);
+    }
+
+    rect.setTexture(&texture); // texture is a sf::Texture
+//    rect.setTextureRect(sf::IntRect(10, 10, 100, 100));
 
     // Font
     sf::Font myFont;
@@ -113,13 +135,24 @@ int main()
         figureBounce(rect, sx_1, sy_1);
         centerTextByFigure(text_r, rect);
 
+        sf::Time elapsed = clock.getElapsedTime();
+
+        // If the elapsed time is greater than or equal to 2 seconds
+        if (elapsed >= sf::milliseconds(500))
+        {
+            // Restart the clock and get the elapsed time
+            elapsed = clock.restart();
+
+            changeDVDcolor(rect);
+        }
+
 
 
         window.clear(sf::Color::Black);
         window.draw(circle);
         window.draw(text_c);
         window.draw(rect);
-        window.draw(text_r);
+//        window.draw(text_r);
         window.display();
     }
 
