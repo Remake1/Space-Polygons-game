@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Wextra -pedantic -g
+CXXFLAGS = -std=c++20 -Wall -Wextra -pedantic -g
 
 SFML_INCLUDE = -ID:\CPP-libs\SFML-2.5.1\includes
 SFML_LIB = -LD:\CPP-libs\SFML-2.5.1\lib -lsfml-graphics -lsfml-window -lsfml-system
