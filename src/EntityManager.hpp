@@ -18,6 +18,7 @@ class EntityManager {
 public:
     EntityManager();
     void update(); // Update "delayed effects".
+    void removeDeadEntities(EntityVec& vec);
     std::shared_ptr<Entity> addEntity(const std::string& tag);
     EntityVec& getEntities();
     EntityVec& getEntities(const std::string& tag);

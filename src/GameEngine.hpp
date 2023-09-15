@@ -1,0 +1,10 @@
+#ifndef CPPGAME_GAMEENGINE_HPP
+#define CPPGAME_GAMEENGINE_HPP
+
+
+class GameEngine {
+
+};
+
+
+#endif //CPPGAME_GAMEENGINE_HPP
