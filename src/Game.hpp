@@ -19,7 +19,21 @@ class Game {
     void init(const std::string & config); // Initialize the game state with config
     void setPaused(); // pause the game
 
-    // TODO: Systems realization
+    void sMovement();       // System: Entity positioning and movement update
+    void sUserInput();      // System: User input
+    void sLifespan();       // System: Lifespan
+    void sRender();         // System: Rendering and drawing
+    void sEnemySpawner();   // System: Spawn Enemies
+    void sCollision();      // System: Collisions
+
+    void spawnPlayer();
+    void spawnEnemy();
+    void spawnBullet();
+//    void spawnSpecialWeapon();
+
+public:
+    Game(const std::string & config);
+    void run();
 };
 
 
