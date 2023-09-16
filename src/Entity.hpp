@@ -19,7 +19,8 @@ class Entity{
     const std::string m_tag   = "Default";
     bool              m_active = true;
 
-    Entity(const std::string& tag, size_t id);
+    Entity(const size_t id, const std::string& tag);
+
 public:
     // Component pointers
     std::shared_ptr<CTransform> cTransform;
@@ -29,9 +30,11 @@ public:
     std::shared_ptr<CCircleShape> cCircleShape;
     std::shared_ptr<CCircleCollision> cCircleCollision;
 
-    void destroy() { m_active = false; }
-    const std::string& tag() { return m_tag; }
-    const bool active() { return m_active; }
+    // Functions to access private members
+    void destroy();
+    bool active() const;
+    const std::string& tag() const;
+    const size_t id() const;
 };
 
 
