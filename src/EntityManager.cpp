@@ -25,8 +25,10 @@ void EntityManager::removeDeadEntities(EntityVec &vec) {
 }
 
 std::shared_ptr<Entity> EntityManager::addEntity(const std::string &tag) {
-//    auto e = std::make_shared<Entity>(tag, m_totalEntities++);
-    auto e = std::shared_ptr<Entity>(new Entity(tag, m_totalEntities++));
+    // Instead of:
+    //    auto e = std::make_shared<Entity>(tag, m_totalEntities++);
+    // We create Entity with "old" way, because Entity constructor is private and EntityManager is friend class
+    auto e = std::shared_ptr<Entity>(new Entity(m_totalEntities++, tag));
     m_toAdd.push_back(e); // Add entity to queue
     return e;
 }

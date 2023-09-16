@@ -4,12 +4,7 @@
 #include <iostream>
 #include <memory>
 
-#include "CTransform.hpp"
-#include "CScore.hpp"
-#include "CLifespan.hpp"
-#include "CInput.hpp"
-#include "CCircleShape.hpp"
-#include "CCircleCollision.hpp"
+#include "Components.hpp"
 
 
 class Entity{
