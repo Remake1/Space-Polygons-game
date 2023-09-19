@@ -1,14 +1,12 @@
 CXX = g++
 CXXFLAGS = -std=c++20 -Wall -Wextra -pedantic -g
 
-ifeq ($(detected_OS),Windows)
+ifeq ($(OS),Windows_NT)
 	# PATH TO SFML LIBRARY
 	SFML_INCLUDE = -ID:\CPP-libs\SFML-2.5.1\includes
 	SFML_LIB = -LD:\CPP-libs\SFML-2.5.1\lib -lsfml-graphics -lsfml-window -lsfml-system
-endif
-
-ifeq ($(detected_OS),Linux)
-	SFML_INCLUDE =
+else
+	SFML_INCLUDE = -Isrc
 	SFML_LIB = -lsfml-graphics -lsfml-window -lsfml-system
 endif
 
@@ -27,7 +25,7 @@ $(EXE): $(OBJ)
 
 run:
 	cd ./bin; \
-	$(EXE)
+	./$(EXE)
 
 clean-obj:
 	rm -f $(OBJ)
