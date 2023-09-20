@@ -1,5 +1,9 @@
 #include "EntityManager.hpp"
 
+EntityManager::EntityManager() {
+
+}
+
 void EntityManager::update() {
     for (auto e : m_toAdd) {
         m_entities.push_back(e);
@@ -31,4 +35,13 @@ std::shared_ptr<Entity> EntityManager::addEntity(const std::string &tag) {
     auto e = std::shared_ptr<Entity>(new Entity(m_totalEntities++, tag));
     m_toAdd.push_back(e); // Add entity to queue
     return e;
+}
+
+EntityVec &EntityManager::getEntities() {
+    return m_entities;
+}
+
+EntityVec &EntityManager::getEntities(const std::string &tag) {
+    // TODO: retern Entities with tag
+    return m_entities;
 }

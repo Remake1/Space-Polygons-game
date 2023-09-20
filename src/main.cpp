@@ -3,6 +3,7 @@
 
 #include "Game.hpp"
 
+
 int main()
 {
     Game g("path_to_config");

@@ -6,7 +6,7 @@ ifeq ($(OS),Windows_NT)
 	SFML_INCLUDE = -ID:\CPP-libs\SFML-2.5.1\includes
 	SFML_LIB = -LD:\CPP-libs\SFML-2.5.1\lib -lsfml-graphics -lsfml-window -lsfml-system
 else
-	SFML_INCLUDE = -Isrc
+	SFML_INCLUDE = -Isrc/
 	SFML_LIB = -lsfml-graphics -lsfml-window -lsfml-system
 endif
 
