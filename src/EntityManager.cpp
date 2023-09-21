@@ -19,7 +19,7 @@ void EntityManager::update() {
 
 // Remove Vector if isActive equals false.
 void EntityManager::removeDeadEntities(EntityVec &vec) {
-    std::erase_if(vec, [](auto& entity) { return !entity->isActive(); });
+    std::erase_if(vec, [](auto& entity) { return !entity->active(); });
 }
 
 std::shared_ptr<Entity> EntityManager::addEntity(const std::string &tag) {
