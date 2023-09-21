@@ -17,6 +17,7 @@ void EntityManager::update() {
     }
 }
 
+// Remove Vector if isActive equals false.
 void EntityManager::removeDeadEntities(EntityVec &vec) {
     std::erase_if(vec, [](auto& entity) { return !entity->isActive(); });
 }

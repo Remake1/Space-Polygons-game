@@ -129,19 +129,25 @@ void Game::sRender() {
     m_window.clear();
 
     // TODO: Update all Entities
+    // TODO: HUD: score, etc...
+    // TODO: Rotations
 
+    // Handle new entity properties:
     // Set player shape actual position to Transform position value
     m_player->cCircleShape->circle.setPosition(m_player->cTransform->pos.x, m_player->cTransform->pos.y);
 
-    // TODO: Rotation
-
-    // draw player circle
+    // Draw player entity
     m_window.draw(m_player->cCircleShape->circle);
-    // draw all circle entities
+
+    // Render all circle entities
     for (auto e : m_entities.getEntities()) {
+        // Handle new entity properties:
+        e->cCircleShape->circle.setPosition(e->cTransform->pos.x, e->cTransform->pos.y);
+        // Draw entity
         m_window.draw(e->cCircleShape->circle);
     }
 
+    // Render changes (kinda like swapbuffers).
     m_window.display();
 }
 
