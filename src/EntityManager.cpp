@@ -12,20 +12,13 @@ void EntityManager::update() {
     m_toAdd.clear();
 
     removeDeadEntities(m_entities);
-    for (auto &key_values: m_entityMap) {
-        // kv is a key-value pair contained in the map
-        //    key   (kv.first):  the tag string
-        //    value (kv.second): the vector storing entities
-        removeDeadEntities(key_values.second);
+    for (auto& [tag, entityVec]: m_entityMap) {
+        removeDeadEntities(entityVec);
     }
 }
 
 void EntityManager::removeDeadEntities(EntityVec &vec) {
-    // use std::remove_if to remove dead entities
-    // probably not the fastest solution, but it is safe
-    vec.erase(std::remove_if(vec.begin(), vec.end(),
-                             [](const std::shared_ptr<Entity> &entity) { return !entity->active(); }),
-              vec.end());
+    std::erase_if(vec, [](auto& entity) { return !entity->isActive(); });
 }
 
 std::shared_ptr<Entity> EntityManager::addEntity(const std::string &tag) {
@@ -37,11 +30,12 @@ std::shared_ptr<Entity> EntityManager::addEntity(const std::string &tag) {
     return e;
 }
 
+// Returns all entities.
 EntityVec &EntityManager::getEntities() {
     return m_entities;
 }
 
+// Returns all entities with specified tag.
 EntityVec &EntityManager::getEntities(const std::string &tag) {
-    // TODO: retern Entities with tag
-    return m_entities;
+    return m_entityMap[tag];
 }
