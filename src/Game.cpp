@@ -45,7 +45,7 @@ void Game::spawnPlayer() {
     // Move player to starting position and change velocity
     float mx = m_window.getSize().x / 2;
     float my = m_window.getSize().y / 2;
-    entity->cTransform = std::make_shared<CTransform>(Vec2(mx, my), Vec2(1.0f, 1.0f), 0.f);
+    entity->cTransform = std::make_shared<CTransform>(Vec2(mx, my), Vec2(0.0f, 0.0f), 0.f);
 
     // Set player shape (Circle) and color
     entity->cCircleShape = std::make_shared<CCircleShape>(28.0f, 8, sf::Color::Cyan, sf::Color::Magenta, 4.0f);
@@ -135,6 +135,8 @@ void Game::sRender() {
     // Handle new entity properties:
     // Set player shape actual position to Transform position value
     m_player->cCircleShape->circle.setPosition(m_player->cTransform->pos.x, m_player->cTransform->pos.y);
+//    m_player->cCircleShape->circle.setRotation(m_player->cTransform->angle);
+
 
     // Draw player entity
     m_window.draw(m_player->cCircleShape->circle);
@@ -152,7 +154,26 @@ void Game::sRender() {
 }
 
 void Game::sMovement() {
-    // TODO
+
+    // Reset the velocity, so it's 'handles' when you release key.
+    m_player->cTransform->velocity = {0.0, 0.0};
+    // Adjust the velocity if keys pressed.
+    if(m_player->cInput->up){
+        m_player->cTransform->velocity.y = -5;
+    }
+    if(m_player->cInput->down){
+        m_player->cTransform->velocity.y = 5;
+    }
+    if(m_player->cInput->right){
+        m_player->cTransform->velocity.x = 5;
+    }
+    if(m_player->cInput->left){
+        m_player->cTransform->velocity.x = -5;
+    }
+
+    // Change position depend on velocity.
+    m_player->cTransform->pos.x += m_player->cTransform->velocity.x;
+    m_player->cTransform->pos.y += m_player->cTransform->velocity.y;
 }
 
 void Game::sCollision() {
@@ -161,4 +182,5 @@ void Game::sCollision() {
 
 void Game::sEnemySpawner() {
     // TODO
+    // use m_currentFrame - lastEnemySpawnTime
 }
