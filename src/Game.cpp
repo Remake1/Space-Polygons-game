@@ -63,25 +63,38 @@ void Game::spawnPlayer() {
     m_player = entity;
 }
 
+// Spawns a bullet.
+// entity - entity, that "shots".
+// target - mouse position, for direction where bullet in shot.
+void Game::spawnBullet(std::shared_ptr<Entity> entity, const Vec2 & target) {
+    // Add bullet entity.
+    auto bullet = m_entities.addEntity("bullet");
+    // Set bullet position to the mouse, and velocity to 0.
+    bullet->cTransform = std::make_shared<CTransform>(target, Vec2(0, 0), 0);
+    // Add shape and color.
+    bullet->cCircleShape = std::make_shared<CCircleShape>(10, 8, sf::Color::Yellow, sf::Color(82, 58, 0), 2);
+}
+
 void Game::spawnEnemy() {
     // TODO: enemy spawner
 
     // use m_lastEnemySpawnTime and m_currentFrame to spawn enemies timmed
 }
 
-
+// -------------------
 // SYSTEMS
+// -------------------
 
 void Game::sUserInput() {
     sf::Event event;
 
     while(m_window.pollEvent(event)){
-        // trigger event when window is closed
+        // Trigger event when window is closed.
         if(event.type == sf::Event::Closed){
             m_running = false;
         }
 
-        // triggers when key is pressed
+        // Triggers when key is pressed.
         if(event.type == sf::Event::KeyPressed){
             switch (event.key.code) {
                 case sf::Keyboard::W:
@@ -101,7 +114,7 @@ void Game::sUserInput() {
             }
         }
 
-        // triggers when key is released
+        // Triggers when key is released.
         if(event.type == sf::Event::KeyReleased){
             switch (event.key.code) {
                 case sf::Keyboard::W:
@@ -121,7 +134,15 @@ void Game::sUserInput() {
             }
         }
 
-
+        if(event.type == sf::Event::MouseButtonPressed){
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                // Call spawnBullet here.
+                spawnBullet(m_player, Vec2(event.mouseButton.x, event.mouseButton.y));
+            }
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                // Call spawnSpecialWeapon here. In the future.
+            }
+        }
     }
 }
 

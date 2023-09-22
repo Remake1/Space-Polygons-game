@@ -28,7 +28,7 @@ class Game {
 
     void spawnPlayer();
     void spawnEnemy();
-    void spawnBullet();
+    void spawnBullet(std::shared_ptr<Entity> entity, const Vec2 & target);
 //    void spawnSpecialWeapon();
 
 public:
