@@ -67,3 +67,14 @@ void Vec2::normalize() {
     x /= len;
     y /= len;
 }
+
+Vec2 Vec2::getNormalized() const {
+    float len = length();
+    return {x / len, y / len};
+}
+
+// Converts two points to absolute vector and normalizes it.
+Vec2 Vec2::getNormalizedVelocity(const Vec2 &rhs) const {
+    Vec2 velocity = {rhs.x-x, rhs.y-y};
+    return velocity.getNormalized();
+}
