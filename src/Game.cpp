@@ -7,9 +7,14 @@ Game::Game(const std::string &config) {
 void Game::init(const std::string &config) {
     // TODO: read the config
 
-    // default windows parameters
+    // Default windows parameters
     m_window.create(sf::VideoMode(1280, 720), "Ball game");
     m_window.setFramerateLimit(60);
+
+    if (!m_font.loadFromFile("Arial.ttf"))
+    {
+        std::cout << "[Font Error] Error loading font!\n";
+    }
 
     spawnPlayer();
 }
@@ -70,7 +75,7 @@ void Game::spawnBullet(std::shared_ptr<Entity> entity, const Vec2 & target) {
     // Add bullet entity.
     auto bullet = m_entities.addEntity("bullet");
     // Set bullet position to the mouse, and velocity to 0.
-    bullet->cTransform = std::make_shared<CTransform>(target, Vec2(0, 0), 0);
+    bullet->cTransform = std::make_shared<CTransform>(entity->cTransform->pos, entity->cTransform->pos.getNormalizedVelocity(target)*5, 0);
     // Add shape and color.
     bullet->cCircleShape = std::make_shared<CCircleShape>(10, 8, sf::Color::Yellow, sf::Color(82, 58, 0), 2);
 }
@@ -79,6 +84,13 @@ void Game::spawnEnemy() {
     // TODO: enemy spawner
 
     // use m_lastEnemySpawnTime and m_currentFrame to spawn enemies timmed
+}
+
+bool Game::isInWindow(Vec2 &point) const {
+    // TODO: Window x y from config
+    if (point.x <= 1280 && point.x >=0 && point.y <= 720 && point.y >= 0){
+        return true;
+    } else return false;
 }
 
 // -------------------
@@ -153,12 +165,22 @@ void Game::sRender() {
     // TODO: HUD: score, etc...
     // TODO: Rotations
 
+    /// HUD
+    // Set text properties
+    m_text.setFont(m_font);
+    m_text.setCharacterSize(25);
+    m_text.setFillColor(sf::Color::White);
+    // Set text string (Entities size)
+    m_text.setString("Entities: " + std::to_string(m_entities.getEntities().size()));
+
+    // Draw HUD text
+    m_window.draw(m_text);
+
+    /// Circles
     // Handle new entity properties:
     // Set player shape actual position to Transform position value
     m_player->cCircleShape->circle.setPosition(m_player->cTransform->pos.x, m_player->cTransform->pos.y);
-//    m_player->cCircleShape->circle.setRotation(m_player->cTransform->angle);
-
-
+    m_player->cCircleShape->circle.setRotation(m_player->cTransform->angle);
     // Draw player entity
     m_window.draw(m_player->cCircleShape->circle);
 
@@ -175,7 +197,9 @@ void Game::sRender() {
 }
 
 void Game::sMovement() {
-
+    // -------------------------
+    // Player
+    // -------------------------
     // Reset the velocity, so it's 'handles' when you release key.
     m_player->cTransform->velocity = {0.0, 0.0};
     // Adjust the velocity if keys pressed.
@@ -195,6 +219,19 @@ void Game::sMovement() {
     // Change position depend on velocity.
     m_player->cTransform->pos.x += m_player->cTransform->velocity.x;
     m_player->cTransform->pos.y += m_player->cTransform->velocity.y;
+    // -------------------------
+    // Bullets
+    // -------------------------
+    for ( auto e : m_entities.getEntities("bullet")) {
+        if (isInWindow(e->cTransform->pos))
+        {
+            e->cTransform->pos.x += e->cTransform->velocity.x;
+            e->cTransform->pos.y += e->cTransform->velocity.y;
+        } else {
+            e->destroy();
+        }
+
+    }
 }
 
 void Game::sCollision() {
