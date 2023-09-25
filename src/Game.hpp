@@ -11,6 +11,7 @@ class Game {
     sf::Text m_text; // Scope text to be drawn
     int m_score = 0;
     int m_currentFrame = 0;
+    int lastEnemySpawnTime = 0;
     bool m_paused = false; // Whether game is paused
     bool m_running = true; // Whether game is running
 

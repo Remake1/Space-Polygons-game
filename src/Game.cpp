@@ -77,13 +77,23 @@ void Game::spawnBullet(std::shared_ptr<Entity> entity, const Vec2 & target) {
     // Set bullet position to the mouse, and velocity to 0.
     bullet->cTransform = std::make_shared<CTransform>(entity->cTransform->pos, entity->cTransform->pos.getNormalizedVelocity(target)*5, 0);
     // Add shape and color.
-    bullet->cCircleShape = std::make_shared<CCircleShape>(10, 8, sf::Color::Yellow, sf::Color(82, 58, 0), 2);
+    bullet->cCircleShape = std::make_shared<CCircleShape>(10.0f, 8, sf::Color::Yellow, sf::Color(82, 58, 0), 2);
+    // Add collision radius
+    bullet->cCircleCollision = std::make_shared<CCircleCollision>(10.0f);
 }
 
+// Spawns an enemy
 void Game::spawnEnemy() {
-    // TODO: enemy spawner
+    auto entity = m_entities.addEntity("enemy");
 
-    // use m_lastEnemySpawnTime and m_currentFrame to spawn enemies timmed
+    float ex = 10 + (rand() % (m_window.getSize().x - 10));
+    float ey = 10 + (rand() % (m_window.getSize().y - 10));
+
+    entity->cTransform = std::make_shared<CTransform>(Vec2(ex, ey), Vec2(0.0f, 0.0f), 0.0f);
+
+    entity->cCircleShape = std::make_shared<CCircleShape>(24.0f, 20, sf::Color::Red, sf::Color::White, 3.0f);
+    // TODO: make the same radius as at Circle Shape
+    entity->cCircleCollision = std::make_shared<CCircleCollision>(24.0f);
 }
 
 bool Game::isInWindow(Vec2 &point) const {
@@ -171,7 +181,7 @@ void Game::sRender() {
     m_text.setCharacterSize(25);
     m_text.setFillColor(sf::Color::White);
     // Set text string (Entities size)
-    m_text.setString("Entities: " + std::to_string(m_entities.getEntities().size()));
+    m_text.setString("Entities: " + std::to_string( m_entities.getEntities().size() ) + "; Score: " + std::to_string( m_score ));
 
     // Draw HUD text
     m_window.draw(m_text);
@@ -235,10 +245,31 @@ void Game::sMovement() {
 }
 
 void Game::sCollision() {
-    // TODO
+    // Implements bullet collisions.
+    for (auto b : m_entities.getEntities("bullet")){
+        // Bullet - Enemy collision:
+        for (auto e : m_entities.getEntities("enemy")) {
+            // Bullet and entity collision condition.
+            if (e->cTransform->pos.distNoSqrt(b->cTransform->pos) <
+                    (b->cCircleCollision->radius + e->cCircleCollision->radius)*(b->cCircleCollision->radius + e->cCircleCollision->radius) )
+            {
+                // Collision occurred.
+                e->destroy();
+                b->destroy();
+
+                m_score++;
+                goto end;
+            }
+        }
+    }
+    end:{}
 }
 
 void Game::sEnemySpawner() {
     // TODO
     // use m_currentFrame - lastEnemySpawnTime
+    if ((m_currentFrame - 180) > lastEnemySpawnTime){
+        spawnEnemy();
+        lastEnemySpawnTime = m_currentFrame;
+    }
 }

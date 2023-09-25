@@ -58,6 +58,10 @@ float Vec2::dist(const Vec2 &rhs) const {
     return sqrtf((rhs.x - x) * (rhs.x - x) + (rhs.y - y) * (rhs.y - y));
 }
 
+float Vec2::distNoSqrt(const Vec2 &rhs) const {
+    return (rhs.x - x) * (rhs.x - x) + (rhs.y - y) * (rhs.y - y);
+}
+
 float Vec2::length() const {
     return sqrtf(x * x + y * y);
 }
