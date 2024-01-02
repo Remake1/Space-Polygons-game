@@ -94,6 +94,16 @@ void Game::spawnEnemy() {
     entity->cCircleShape = std::make_shared<CCircleShape>(24.0f, 20, sf::Color::Red, sf::Color::White, 3.0f);
     // TODO: make the same radius as at Circle Shape
     entity->cCircleCollision = std::make_shared<CCircleCollision>(24.0f);
+
+    entity->cLifespan = std::make_shared<CLifespan>(1, 60);
+}
+
+void Game::spawnEnemyBullet(std::shared_ptr<Entity> entity) {
+    // Spawn bullet to the player position.
+    auto bullet = m_entities.addEntity("enemy_bullet");
+    bullet->cTransform = std::make_shared<CTransform>(entity->cTransform->pos, entity->cTransform->pos.getNormalizedVelocity(m_player->cTransform->pos)*5, 0);
+    bullet->cCircleShape = std::make_shared<CCircleShape>(10.0f, 8, sf::Color::Red, sf::Color(82, 58, 0), 2);
+    bullet->cCircleCollision = std::make_shared<CCircleCollision>(10.0f);
 }
 
 bool Game::isInWindow(Vec2 &point) const {
@@ -242,6 +252,16 @@ void Game::sMovement() {
         }
 
     }
+    for ( auto e : m_entities.getEntities("enemy_bullet")) {
+        if (isInWindow(e->cTransform->pos))
+        {
+            e->cTransform->pos.x += e->cTransform->velocity.x;
+            e->cTransform->pos.y += e->cTransform->velocity.y;
+        } else {
+            e->destroy();
+        }
+
+    }
 }
 
 void Game::sCollision() {
@@ -262,14 +282,48 @@ void Game::sCollision() {
             }
         }
     }
+    // Implements enemy collisions.
+    for (auto e : m_entities.getEntities("enemy")){
+        // Enemy and player collision condition.
+        if (e->cTransform->pos.distNoSqrt(m_player->cTransform->pos) <
+            (m_player->cCircleCollision->radius + e->cCircleCollision->radius)*(m_player->cCircleCollision->radius + e->cCircleCollision->radius) )
+        {
+            // Collision occurred.
+            e->destroy();
+            m_player->destroy();
+            m_running = false;
+            goto end;
+        }
+    }
+    // Implements enemy bullet collisions.
+    for (auto b : m_entities.getEntities("enemy_bullet")){
+        // Enemy bullet and player collision condition.
+        if (b->cTransform->pos.distNoSqrt(m_player->cTransform->pos) <
+            (m_player->cCircleCollision->radius + b->cCircleCollision->radius)*(m_player->cCircleCollision->radius + b->cCircleCollision->radius) )
+        {
+            // Collision occurred.
+            b->destroy();
+            m_player->destroy();
+            m_running = false;
+            goto end;
+        }
+    }
     end:{}
 }
 
 void Game::sEnemySpawner() {
     // TODO
-    // use m_currentFrame - lastEnemySpawnTime
-    if ((m_currentFrame - 180) > lastEnemySpawnTime){
+    // Spawn enemy
+    if ((m_currentFrame - enemySpawnInterval) > lastEnemySpawnTime){
         spawnEnemy();
         lastEnemySpawnTime = m_currentFrame;
+        enemySpawnInterval -= 7;
+    }
+    // Spawn enemy bullet
+    for (auto e : m_entities.getEntities("enemy")) {
+        if ((m_currentFrame - 60) > e->cLifespan->bullet){
+            spawnEnemyBullet(e);
+            e->cLifespan->bullet = m_currentFrame;
+        }
     }
 }

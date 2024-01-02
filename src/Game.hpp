@@ -12,6 +12,7 @@ class Game {
     int m_score = 0;
     int m_currentFrame = 0;
     int lastEnemySpawnTime = 0;
+    int enemySpawnInterval = 180;
     bool m_paused = false; // Whether game is paused
     bool m_running = true; // Whether game is running
 
@@ -30,6 +31,7 @@ class Game {
     void spawnPlayer();
     void spawnEnemy();
     void spawnBullet(std::shared_ptr<Entity> entity, const Vec2 & target);
+    void spawnEnemyBullet(std::shared_ptr<Entity> entity);
     bool isInWindow(Vec2 & point) const;
 //    void spawnSpecialWeapon();
 

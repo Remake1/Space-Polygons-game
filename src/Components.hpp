@@ -42,8 +42,9 @@ class CLifespan {
 public:
     int total = 0; // total amount of lifespan
     int remaining = 0; // remaining amount of lifespan on the entity
-    CLifespan(int t)
-            : total(t), remaining(t) {}
+    int bullet = 0; // bullet lifespan
+    CLifespan(int t, int b)
+            : total(t), remaining(t), bullet(b) {}
 };
 
 class CScore {

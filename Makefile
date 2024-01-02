@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++20 -Wall -Wextra -pedantic -g
+CXXFLAGS = -std=c++20 -Wall -pedantic -g
 
 ifeq ($(OS),Windows_NT)
 	# PATH TO SFML LIBRARY
@@ -16,6 +16,7 @@ OBJ = $(SRC:.cpp=.o)
 EXE = sfml-app
 
 all: $(EXE) run clean-obj
+build: $(EXE) clean-obj
 
 $(EXE): $(OBJ)
 	$(CXX) $^ -o bin/$@ $(SFML_LIB)
