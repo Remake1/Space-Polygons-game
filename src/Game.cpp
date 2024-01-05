@@ -28,6 +28,7 @@ void Game::run() {
             sEnemySpawner();
             sMovement();
             sCollision();
+            sLifespan();
             sUserInput();
         }
 
@@ -63,6 +64,7 @@ void Game::spawnPlayer() {
     entity->cInput = std::make_shared<CInput>();
 
     // TODO: Add Lifespan and Score
+    entity->cLifespan = std::make_shared<CLifespan>(3, 10);
 
     // Set local player to player entity (against entity manager paradigm)
     m_player = entity;
@@ -186,6 +188,19 @@ void Game::sRender() {
     // TODO: Rotations
 
     /// HUD
+    // m_player->cLifespan->remaining
+    // Draw Health heart texture
+    for (int i = 0; i < m_player->cLifespan->remaining; i++) {
+        sf::Texture heart;
+        if (!heart.loadFromFile("heart_texture.png"))
+        {
+            std::cout << "[Texture Error] Error loading heart texture!\n";
+        }
+        sf::Sprite sprite;
+        sprite.setTexture(heart);
+        sprite.setPosition(10 + i*30, 35);
+        m_window.draw(sprite);
+    }
     // Set text properties
     m_text.setFont(m_font);
     m_text.setCharacterSize(25);
@@ -290,9 +305,7 @@ void Game::sCollision() {
         {
             // Collision occurred.
             e->destroy();
-            m_player->destroy();
-            m_running = false;
-            goto end;
+            m_player->cLifespan->remaining--;
         }
     }
     // Implements enemy bullet collisions.
@@ -303,9 +316,7 @@ void Game::sCollision() {
         {
             // Collision occurred.
             b->destroy();
-            m_player->destroy();
-            m_running = false;
-            goto end;
+            m_player->cLifespan->remaining--;
         }
     }
     end:{}
@@ -325,5 +336,12 @@ void Game::sEnemySpawner() {
             spawnEnemyBullet(e);
             e->cLifespan->bullet = m_currentFrame;
         }
+    }
+}
+
+void Game::sLifespan() {
+    if(m_player->cLifespan->remaining <= 0){
+        m_player->destroy();
+        m_running = false;
     }
 }

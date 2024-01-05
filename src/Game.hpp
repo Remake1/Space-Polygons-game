@@ -32,6 +32,7 @@ class Game {
     void spawnEnemy();
     void spawnBullet(std::shared_ptr<Entity> entity, const Vec2 & target);
     void spawnEnemyBullet(std::shared_ptr<Entity> entity);
+
     bool isInWindow(Vec2 & point) const;
 //    void spawnSpecialWeapon();
 
