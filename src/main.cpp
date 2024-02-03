@@ -1,9 +1,9 @@
-#include "Game.hpp"
+#include "GameEngine.hpp"
 
 
 int main()
 {
-    Game g("path_to_config");
+    GameEngine g("");
     g.run();
 
     return 0;

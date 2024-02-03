@@ -1,4 +1,4 @@
-#include "Game.hpp"
+#include "Scene_Play.hpp"
 
 Game::Game(const std::string &config) {
     init(config);
@@ -8,7 +8,7 @@ void Game::init(const std::string &config) {
     // TODO: read the config
 
     // Default windows parameters
-    m_window.create(sf::VideoMode(1280, 720), "Ball game");
+    m_window.create(sf::VideoMode(W_WIDTH, W_HEIGHT), "Ball game");
     m_window.setFramerateLimit(60);
 
     if (!m_font.loadFromFile("Arial.ttf"))
@@ -110,7 +110,7 @@ void Game::spawnEnemyBullet(std::shared_ptr<Entity> entity) {
 
 bool Game::isInWindow(Vec2 &point) const {
     // TODO: Window x y from config
-    if (point.x <= 1280 && point.x >=0 && point.y <= 720 && point.y >= 0){
+    if (point.x <= W_WIDTH && point.x >=0 && point.y <= W_HEIGHT && point.y >= 0){
         return true;
     } else return false;
 }
