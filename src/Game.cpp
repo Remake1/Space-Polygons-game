@@ -8,7 +8,7 @@ void Game::init(const std::string &config) {
     // TODO: read the config
 
     // Default windows parameters
-    m_window.create(sf::VideoMode(1280, 720), "Ball game");
+    m_window.create(sf::VideoMode(W_WIDTH, W_HEIGHT), "Ball game");
     m_window.setFramerateLimit(60);
 
     if (!m_font.loadFromFile("Arial.ttf"))
@@ -100,17 +100,17 @@ void Game::spawnEnemy() {
     entity->cLifespan = std::make_shared<CLifespan>(1, 60);
 }
 
-void Game::spawnEnemyBullet(std::shared_ptr<Entity> entity) {
+void Game::spawnEnemyBullet(std::shared_ptr<Entity> entity, int bullet_velocity = 5) {
     // Spawn bullet to the player position.
     auto bullet = m_entities.addEntity("enemy_bullet");
-    bullet->cTransform = std::make_shared<CTransform>(entity->cTransform->pos, entity->cTransform->pos.getNormalizedVelocity(m_player->cTransform->pos)*5, 0);
+    bullet->cTransform = std::make_shared<CTransform>(entity->cTransform->pos, entity->cTransform->pos.getNormalizedVelocity(m_player->cTransform->pos)*bullet_velocity, 0);
     bullet->cCircleShape = std::make_shared<CCircleShape>(10.0f, 8, sf::Color::Red, sf::Color(82, 58, 0), 2);
     bullet->cCircleCollision = std::make_shared<CCircleCollision>(10.0f);
 }
 
 bool Game::isInWindow(Vec2 &point) const {
     // TODO: Window x y from config
-    if (point.x <= 1280 && point.x >=0 && point.y <= 720 && point.y >= 0){
+    if (point.x <= m_window.getSize().x && point.x >=0 && point.y <= m_window.getSize().y && point.y >= 0){
         return true;
     } else return false;
 }
@@ -328,12 +328,14 @@ void Game::sEnemySpawner() {
     if ((m_currentFrame - enemySpawnInterval) > lastEnemySpawnTime){
         spawnEnemy();
         lastEnemySpawnTime = m_currentFrame;
-        enemySpawnInterval -= 7;
+        if(enemySpawnInterval > 60) enemySpawnInterval -= 7;
     }
     // Spawn enemy bullet
+    int bullet_velocity = 5;
     for (auto e : m_entities.getEntities("enemy")) {
         if ((m_currentFrame - 60) > e->cLifespan->bullet){
-            spawnEnemyBullet(e);
+            spawnEnemyBullet(e, bullet_velocity);
+            if(bullet_velocity < 20) bullet_velocity++;
             e->cLifespan->bullet = m_currentFrame;
         }
     }

@@ -5,6 +5,9 @@
 #include "EntityManager.hpp"
 
 class Game {
+    int W_WIDTH = 1920;
+    int W_HEIGHT = 1080;
+
     sf::RenderWindow m_window; // Game window where we draw
     EntityManager m_entities; // Vector of Entities
     sf::Font m_font; // Font that is used to draw text
@@ -31,7 +34,7 @@ class Game {
     void spawnPlayer();
     void spawnEnemy();
     void spawnBullet(std::shared_ptr<Entity> entity, const Vec2 & target);
-    void spawnEnemyBullet(std::shared_ptr<Entity> entity);
+    void spawnEnemyBullet(std::shared_ptr<Entity> entity, int bullet_velocity);
 
     bool isInWindow(Vec2 & point) const;
 //    void spawnSpecialWeapon();

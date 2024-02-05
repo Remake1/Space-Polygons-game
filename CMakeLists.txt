@@ -3,6 +3,6 @@ project(CPPGame)
 
 set(CMAKE_CXX_STANDARD 20)
 
-include_directories(D:/CPP-libs/SFML-2.5.1/includes)
+include_directories(C:/Libs/SFML-2.5.1/includes)
 add_executable(CPPGame src/main.cpp)
 
