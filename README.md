@@ -1,7 +1,9 @@
 ## Showcase
 ![game_screenshot.png](docs/game_screenshot.png)
 
-![game_video.mp4](docs/game_video.mp4)
+https://github.com/Remake1/Small-2D-Cpp-sfml-game/assets/68705597/c23ca6b0-6fcf-4df2-abcf-8a6522ff21ed
+
+
 
 ## About
 This is a simple 2D game made with SFML. 
