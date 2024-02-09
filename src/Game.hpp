@@ -5,8 +5,8 @@
 #include "EntityManager.hpp"
 
 class Game {
-    int W_WIDTH = 1920;
-    int W_HEIGHT = 1080;
+    const int W_WIDTH = 1280;
+    const int W_HEIGHT = 720;
 
     sf::RenderWindow m_window; // Game window where we draw
     EntityManager m_entities; // Vector of Entities

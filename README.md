@@ -1,16 +1,29 @@
-# Requirements
-* g++
-* make
-* sfml
+## Showcase
+![game_screenshot.png](docs/game_screenshot.png)
 
-# Setup
+![game_video.mp4](docs/game_video.mp4)
+
+## About
+This is a simple 2D game made with SFML. 
+The game is 2d space shooter where the player has to shoot the enemies and avoid their bullets.
+
+The game is made using Entity component system (ECS) architecture. There is simple Entity manager.
+
+## Requirements
+* g++
+* Make
+* SFML 2.5.1
+
+## Setup
 #### On Linux:
 * run `make all`
 #### On Windows:
-* Download sfml from official website (https://www.sfml-dev.org/download/sfml/2.6.1/) and select GCC MinGW 64-bit version
-* Change path to sfml include files (SFML_INCLUDE) and sfml libraries (SFML_LIB) in [Makefile](./Makefile)
+* Download and extract sfml from official website (https://www.sfml-dev.org/download/sfml/2.5.1/) and select GCC MinGW 64-bit version
+* Create .env file using .env.example as a template and set the path of the SFML include and lib folder
 * run `make all`
 
-# Note
+*If you have issues with environment variables in makefile, set the SFML_INCLUDE and SFML_LIB variables manually in makefile*
+
+## Note
 
 There is no cmake support. CMakeList.txt is just for ide's on Windows
