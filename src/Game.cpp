@@ -238,16 +238,17 @@ void Game::sMovement() {
     // Reset the velocity, so it's 'handles' when you release key.
     m_player->cTransform->velocity = {0.0, 0.0};
     // Adjust the velocity if keys pressed.
-    if(m_player->cInput->up){
+    // Add out of bounds protection and include radius of the circle.
+    if(m_player->cInput->up && m_player->cTransform->pos.y > 0 + m_player->cCircleCollision->radius){
         m_player->cTransform->velocity.y = -5;
     }
-    if(m_player->cInput->down){
+    if(m_player->cInput->down && m_player->cTransform->pos.y < W_HEIGHT - m_player->cCircleCollision->radius){
         m_player->cTransform->velocity.y = 5;
     }
-    if(m_player->cInput->right){
+    if(m_player->cInput->right && m_player->cTransform->pos.x < W_WIDTH - m_player->cCircleCollision->radius){
         m_player->cTransform->velocity.x = 5;
     }
-    if(m_player->cInput->left){
+    if(m_player->cInput->left && m_player->cTransform->pos.x > 0 + m_player->cCircleCollision->radius){
         m_player->cTransform->velocity.x = -5;
     }
 
