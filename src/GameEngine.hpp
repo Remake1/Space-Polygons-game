@@ -13,6 +13,7 @@ private:
     std::string         m_currentScene;
     bool                m_running=true;
     size_t              m_simulationSpeed = 1;
+    sf::Font m_font; // Font that is used to draw text
 
     void init(const std::string & path);
     void update();

@@ -9,6 +9,12 @@ void GameEngine::init(const std::string &path) {
 
     m_window.create(sf::VideoMode(1280, 720), "Space Shooter");
     m_window.setFramerateLimit(60);
+
+    if (!m_font.loadFromFile("Arial.ttf"))
+    {
+        std::cout << "[Font Error] Error loading font!\n";
+    }
+
     changeScene("MENU", std::make_shared<Scene_Menu>(this));
 }
 
