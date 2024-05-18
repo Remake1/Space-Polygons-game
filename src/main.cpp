@@ -1,10 +1,10 @@
-#include "Game.hpp"
+#include "GameEngine.hpp"
 
 
 int main()
 {
-    Game g("path_to_config");
-    g.run();
+    GameEngine gameEngine("config");
+    gameEngine.run();
 
     return 0;
 }

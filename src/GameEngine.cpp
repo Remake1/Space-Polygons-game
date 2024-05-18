@@ -1,5 +1,7 @@
 #include "GameEngine.hpp"
 
+#include "Scene_Play.hpp"
+
 GameEngine::GameEngine(const std::string &path) {
     init(path);
 }
@@ -15,7 +17,9 @@ void GameEngine::init(const std::string &path) {
         std::cout << "[Font Error] Error loading font!\n";
     }
 
-    changeScene("MENU", std::make_shared<Scene_Menu>(this));
+    changeScene("PLAY", std::make_shared<Scene_Play>(this));
+    // Fix error: In template: no matching function for call to 'construct_at'
+
 }
 
 std::shared_ptr<Scene> GameEngine::currentScene() {
@@ -37,9 +41,6 @@ void GameEngine::sUserInput() {
         if (event.type == sf::Event::Closed) {
             quit();
         }
-        if(currentScene()) {
-            currentScene()->sUserInput(event);
-        }
     }
 }
 
@@ -48,19 +49,21 @@ void GameEngine::quit() {
 }
 
 void GameEngine::changeScene(const std::string &sceneName, std::shared_ptr<Scene> scene, bool endCurrentScene) {
-    if(scene) {
+//    if(scene) {
+//        m_sceneMap[sceneName] = scene;
+//        if(endCurrentScene && currentScene()) {
+//            currentScene()->end();
+//        }
+//        m_currentScene = sceneName;
+//        currentScene()->start();
+//    }
+
+    m_currentScene = sceneName;
+    if (scene)
         m_sceneMap[sceneName] = scene;
-        if(endCurrentScene && currentScene()) {
-            currentScene()->end();
-        }
-        m_currentScene = sceneName;
-        currentScene()->start();
-    }
 }
 
-sf::RenderWindow &GameEngine::window() {
-    return m_window;
-}
+sf::RenderWindow &GameEngine::window() { return m_window; }
 
 void GameEngine::run() {
     while (isRunning()) {
@@ -70,4 +73,8 @@ void GameEngine::run() {
 
 bool GameEngine::isRunning() const {
     return m_running;
+}
+
+sf::Font GameEngine::getFont() {
+    return m_font;
 }

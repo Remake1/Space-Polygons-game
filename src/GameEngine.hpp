@@ -7,7 +7,7 @@
 using SceneMap = std::map<std::string, std::shared_ptr<Scene>>;
 
 class GameEngine {
-private:
+protected:
     SceneMap            m_sceneMap;
     sf::RenderWindow    m_window;
     std::string         m_currentScene;
@@ -24,10 +24,14 @@ public:
     explicit GameEngine(const std::string &path);
 
     void changeScene(const std::string & sceneName,std::shared_ptr<Scene> scene, bool endCurrentScene = false);
-    sf ::RenderWindow &window();
+
+    sf::RenderWindow &window();
+
     void run(); // main loop
     void quit();
     bool isRunning() const;
+
+    sf::Font getFont();
 };
 
 
