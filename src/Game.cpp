@@ -111,6 +111,23 @@ void Game::spawnEnemyBullet(std::shared_ptr<Entity> entity, int bullet_velocity 
     bullet->cCircleCollision = std::make_shared<CCircleCollision>(10.0f);
 }
 
+void Game::spawnSuperBullet(std::shared_ptr<Entity> entity, const Vec2 & target){
+    auto bullet = m_entities.addEntity("S_bullet");
+    // Set bullet position to the mouse, and velocity to 0.
+    bullet->cTransform = std::make_shared<CTransform>(entity->cTransform->pos, entity->cTransform->pos.getNormalizedVelocity(target)*5, 0);
+    // Add shape and color.
+    bullet->cCircleShape = std::make_shared<CCircleShape>(15.0f, 8, sf::Color(11, 255, 3), sf::Color(4, 118, 0), 2);
+    // Add collision radius
+    bullet->cCircleCollision = std::make_shared<CCircleCollision>(15.0f);
+}
+
+void Game::spawnSmallBullets(std::shared_ptr<Entity> entity) {
+    // Spawn 8 bullets around the entity, Use spawnBullet function.
+    for (int i = 0; i < 8; i++) {
+        spawnBullet(entity, entity->cTransform->pos + Vec2(cosf(i * 3.14 / 4), sinf(i * 3.14 / 4)) * 10);
+    }
+}
+
 bool Game::isInWindow(Vec2 &point) const {
     // TODO: Window x y from config
     if (point.x <= m_window.getSize().x && point.x >=0 && point.y <= m_window.getSize().y && point.y >= 0){
@@ -176,8 +193,12 @@ void Game::sUserInput() {
                     // Call spawnBullet here.
                     spawnBullet(m_player, Vec2(event.mouseButton.x, event.mouseButton.y));
                 }
-                if (event.mouseButton.button == sf::Mouse::Left) {
-                    // Call spawnSpecialWeapon here. In the future.
+                if (event.mouseButton.button == sf::Mouse::Right) {
+                    // cooldown for super bullet
+                    if ((m_currentFrame - 120) > lastBulletSpawnTime){
+                        lastBulletSpawnTime = m_currentFrame;
+                        spawnSuperBullet(m_player, Vec2(event.mouseButton.x, event.mouseButton.y));
+                    }
                 }
             }
 
@@ -294,8 +315,18 @@ void Game::sMovement() {
         } else {
             e->destroy();
         }
-
     }
+
+    for ( auto e : m_entities.getEntities("S_bullet")) {
+        if (isInWindow(e->cTransform->pos))
+        {
+            e->cTransform->pos.x += e->cTransform->velocity.x;
+            e->cTransform->pos.y += e->cTransform->velocity.y;
+        } else {
+            e->destroy();
+        }
+    }
+
     for ( auto e : m_entities.getEntities("enemy_bullet")) {
         if (isInWindow(e->cTransform->pos))
         {
@@ -317,6 +348,25 @@ void Game::sCollision() {
             if (e->cTransform->pos.distNoSqrt(b->cTransform->pos) <
                     (b->cCircleCollision->radius + e->cCircleCollision->radius)*(b->cCircleCollision->radius + e->cCircleCollision->radius) )
             {
+                // Collision occurred.
+                e->destroy();
+                b->destroy();
+
+                m_score++;
+                goto end;
+            }
+        }
+    }
+    // Implements super bullet collisions.
+    for (auto b : m_entities.getEntities("S_bullet")){
+        // Bullet - Enemy collision:
+        for (auto e : m_entities.getEntities("enemy")) {
+            // Bullet and entity collision condition.
+            if (e->cTransform->pos.distNoSqrt(b->cTransform->pos) <
+                (b->cCircleCollision->radius + e->cCircleCollision->radius)*(b->cCircleCollision->radius + e->cCircleCollision->radius) )
+            {
+                // Spawn small bullets
+                spawnSmallBullets(b);
                 // Collision occurred.
                 e->destroy();
                 b->destroy();

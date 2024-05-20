@@ -8,6 +8,7 @@ class Game {
     const int W_WIDTH = 1280;
     const int W_HEIGHT = 720;
 
+
     sf::RenderWindow m_window; // Game window where we draw
     EntityManager m_entities; // Vector of Entities
     sf::Font m_font; // Font that is used to draw text
@@ -16,6 +17,7 @@ class Game {
     int m_currentFrame = 0;
     int lastEnemySpawnTime = 0;
     int enemySpawnInterval = 180;
+    int lastBulletSpawnTime = 0;
     bool m_paused = false; // Whether game is paused
     bool m_running = true; // Whether game is running
 
@@ -53,6 +55,8 @@ class Game {
     void spawnPlayer();
     void spawnEnemy();
     void spawnBullet(std::shared_ptr<Entity> entity, const Vec2 & target);
+    void spawnSuperBullet(std::shared_ptr<Entity> entity, const Vec2 & target);
+    void spawnSmallBullets(std::shared_ptr<Entity> entity);
     void spawnEnemyBullet(std::shared_ptr<Entity> entity, int bullet_velocity);
 
     bool isInWindow(Vec2 & point) const;
