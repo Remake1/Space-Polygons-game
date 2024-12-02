@@ -16,6 +16,8 @@ void Game::init(const std::string &config) {
         std::cout << "[Font Error] Error loading font!\n";
     }
 
+    loadSounds();
+
     initMenu();
     spawnPlayer();
     setPaused();
@@ -77,6 +79,7 @@ void Game::spawnPlayer() {
 // entity - entity, that "shots".
 // target - mouse position, for direction where bullet in shot.
 void Game::spawnBullet(std::shared_ptr<Entity> entity, const Vec2 & target) {
+    playSound("shoot");
     // Add bullet entity.
     auto bullet = m_entities.addEntity("bullet");
     // Set bullet position to the mouse, and velocity to 0.
@@ -112,6 +115,7 @@ void Game::spawnEnemyBullet(std::shared_ptr<Entity> entity, int bullet_velocity 
 }
 
 void Game::spawnSuperBullet(std::shared_ptr<Entity> entity, const Vec2 & target){
+    playSound("super-shoot");
     auto bullet = m_entities.addEntity("S_bullet");
     // Set bullet position to the mouse, and velocity to 0.
     bullet->cTransform = std::make_shared<CTransform>(entity->cTransform->pos, entity->cTransform->pos.getNormalizedVelocity(target)*5, 0);
@@ -348,6 +352,7 @@ void Game::sCollision() {
             if (e->cTransform->pos.distNoSqrt(b->cTransform->pos) <
                     (b->cCircleCollision->radius + e->cCircleCollision->radius)*(b->cCircleCollision->radius + e->cCircleCollision->radius) )
             {
+                playSound("enemy-hit");
                 // Collision occurred.
                 e->destroy();
                 b->destroy();
@@ -382,6 +387,7 @@ void Game::sCollision() {
         if (e->cTransform->pos.distNoSqrt(m_player->cTransform->pos) <
             (m_player->cCircleCollision->radius + e->cCircleCollision->radius)*(m_player->cCircleCollision->radius + e->cCircleCollision->radius) )
         {
+            playSound("hp-lose");
             // Collision occurred.
             e->destroy();
             m_player->cLifespan->remaining--;
@@ -393,6 +399,7 @@ void Game::sCollision() {
         if (b->cTransform->pos.distNoSqrt(m_player->cTransform->pos) <
             (m_player->cCircleCollision->radius + b->cCircleCollision->radius)*(m_player->cCircleCollision->radius + b->cCircleCollision->radius) )
         {
+            playSound("hp-lose");
             // Collision occurred.
             b->destroy();
             m_player->cLifespan->remaining--;
@@ -422,6 +429,7 @@ void Game::sEnemySpawner() {
 
 void Game::sLifespan() {
     if(m_player->cLifespan->remaining <= 0){
+        playSound("end-of-game");
         m_player->destroy();
         // remove all entities
         for (auto e : m_entities.getEntities()) {
@@ -430,6 +438,8 @@ void Game::sLifespan() {
         updateScore(m_score);
         m_score = 0;
         lastEnemySpawnTime = 0;
+        enemySpawnInterval = 180;
+        lastBulletSpawnTime = 0;
         spawnPlayer();
         m_paused = true;
         m_currentFrame = 0;
@@ -496,7 +506,7 @@ void Game::initMenu() {
     m_scoreText.setCharacterSize(24);
     m_scoreText.setFillColor(sf::Color::White);
     m_scoreText.setPosition(W_WIDTH / 2 - 50, W_HEIGHT / 2 + 100);
-    m_titleText.setString("Score Board\n");
+    m_scoreText.setString("Score Board\n");
 }
 
 void Game::updateScore(int score) {
@@ -509,4 +519,21 @@ void Game::updateScore(int score) {
         m_scoreBoard.erase(m_scoreBoard.begin() + 5, m_scoreBoard.end());
     }
     m_gameCount++;
+}
+
+
+void Game::loadSounds() {
+    // Load sound effects
+    sounds["shoot"].loadFromFile("audio/shoot.wav");
+    sounds["super-shoot"].loadFromFile("audio/super-shoot.wav");
+    sounds["hp-lose"].loadFromFile("audio/hp-lose.wav");
+    sounds["enemy-hit"].loadFromFile("audio/enemy-hit.wav");
+    sounds["end-of-game"].loadFromFile("audio/end-of-game.wav");
+    soundEffect.setBuffer(sounds["shoot"]);
+}
+
+void Game::playSound(const std::string &sound) {
+    soundEffect.setBuffer(sounds[sound]);
+    soundEffect.setVolume(20);
+    soundEffect.play();
 }

@@ -2,7 +2,12 @@
 #define CPPGAME_GAME_HPP
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+
+#include <unordered_map>
+
 #include "EntityManager.hpp"
+
 
 class Game {
     const int W_WIDTH = 1280;
@@ -31,6 +36,11 @@ class Game {
     sf::Text m_exitText;
     sf::Text m_titleText;
     sf::Text m_scoreText;
+
+    // Sound
+    std::unordered_map<std::string, sf::SoundBuffer> sounds;
+    sf::Sound soundEffect;
+
     // Score board
     int m_gameCount = 1;
     std::vector<std::pair<int, int>> m_scoreBoard;
@@ -41,6 +51,10 @@ class Game {
     void init(const std::string & config); // Initialize the game state with config
     void initMenu(); // Initialize the menu
     void setPaused(); // pause the game
+
+    // sound
+    void loadSounds();
+    void playSound(const std::string & sound);
 
     void sMovement();       // System: Entity positioning and movement update
     void sUserInput();      // System: User input
