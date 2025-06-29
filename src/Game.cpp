@@ -8,7 +8,7 @@ void Game::init(const std::string &config) {
     // TODO: read the config
 
     // Default windows parameters
-    m_window.create(sf::VideoMode(W_WIDTH, W_HEIGHT), "Space Shooter");
+    m_window.create(sf::VideoMode(W_WIDTH, W_HEIGHT), "Space Polygons");
     m_window.setFramerateLimit(60);
 
     if (!m_font.loadFromFile("prstartk.ttf"))
@@ -496,7 +496,7 @@ void Game::initMenu() {
     m_exitText.setPosition(W_WIDTH / 2 - 55, W_HEIGHT / 2 + 35);
 
     m_titleText.setFont(m_font);
-    m_titleText.setString("Space Shooter");
+    m_titleText.setString("Space Polygons");
     m_titleText.setCharacterSize(48);
     m_titleText.setFillColor(sf::Color::White);
     m_titleText.setPosition(W_WIDTH / 2 - 200, W_HEIGHT / 2 - 200);
