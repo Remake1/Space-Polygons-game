@@ -28,4 +28,4 @@ The game is made using Entity component system (ECS) architecture. There is simp
 
 ## Note
 
-There is no cmake support. CMakeList.txt is just for ide's on Windows
+There is no cmake support. CMakeList.txt is just for old version of JetBrains IDE.
