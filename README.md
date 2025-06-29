@@ -2,7 +2,11 @@
 ![new_game_screenshot.png](docs/new_game_screenshot.png)
 ![new_menu_screenshot.png](docs/new_menu_screenshot.png)
 
-https://github.com/Remake1/Small-2D-Cpp-sfml-game/assets/68705597/c23ca6b0-6fcf-4df2-abcf-8a6522ff21ed
+
+
+
+https://github.com/user-attachments/assets/eaca4fe8-2193-4e04-b702-52264d5e338e
+
 
 
 
