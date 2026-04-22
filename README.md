@@ -1,3 +1,11 @@
+# Space Polygons
+
+## About
+This is a simple 2D game made with SFML. 
+The game is 2d space shooter where the player has to shoot the enemies and avoid their bullets.
+
+The game is made using Entity component system (ECS) architecture. There is simple Entity manager.
+
 ## Showcase
 ![new_game_screenshot.png](docs/new_game_screenshot.png)
 ![new_menu_screenshot.png](docs/new_menu_screenshot.png)
@@ -10,11 +18,7 @@ https://github.com/user-attachments/assets/eaca4fe8-2193-4e04-b702-52264d5e338e
 
 
 
-## About
-This is a simple 2D game made with SFML. 
-The game is 2d space shooter where the player has to shoot the enemies and avoid their bullets.
 
-The game is made using Entity component system (ECS) architecture. There is simple Entity manager.
 
 ## Requirements
 * g++
